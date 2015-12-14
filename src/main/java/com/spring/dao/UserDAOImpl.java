@@ -20,8 +20,30 @@ public class UserDAOImpl implements UserDAO {
     
     @Transactional
     @SuppressWarnings("unchecked")
+    public <T> T get(Class<T> clazz, int id) {
+        return (T) sessionFactory.getCurrentSession().get(clazz, id);
+    }
+    
+    @Transactional
+    public <T> void delete(T rm) {
+        sessionFactory.getCurrentSession().delete(rm);
+    }
+    
+    @Transactional
+    public <T> void saveOrUpdate(T data) {
+        sessionFactory.getCurrentSession().saveOrUpdate(data);
+    }
+    
+    @Transactional
+    @SuppressWarnings("unchecked")
     public List<User> list() {
         return sessionFactory.getCurrentSession().createCriteria(User.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+    }
+    
+    @Transactional
+    @SuppressWarnings("unchecked")
+    public List<User> findByName(String username) {
+        return sessionFactory.getCurrentSession().createQuery("FROM User WHERE username = :username").setString("username", username).list();
     }
     
 }
